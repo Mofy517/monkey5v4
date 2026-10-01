@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>スマスロ モンキーターンV 設定判別ツール</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f3f5f7;color:#17202a}
+.wrap{max-width:760px;margin:auto;padding:14px}.hero{background:#17202a;color:#fff;border-radius:16px;padding:18px;margin-bottom:12px}
+h1{font-size:22px;margin:0 0 6px}.sub{font-size:13px;opacity:.85}
+.card{background:#fff;border-radius:14px;padding:15px;margin:10px 0;box-shadow:0 2px 9px #00000010}
+h2{font-size:17px;margin:0 0 10px}.hint{font-size:12px;color:#667085;margin:4px 0 10px;line-height:1.55}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.field label{display:block;font-size:12px;font-weight:700;margin-bottom:4px}.field input,.field select{width:100%;padding:10px;border:1px solid #ccd2d8;border-radius:9px;font-size:16px;background:#fff}
+button{border:0;border-radius:10px;padding:11px 14px;font-weight:700;font-size:14px}.primary{background:#17202a;color:#fff;width:100%;margin-top:10px}.reset{background:#e8ebee;color:#222;margin-top:8px;width:100%}
+.row{display:flex;gap:8px;align-items:center;margin:7px 0}.row label{flex:1;font-size:14px}.row select{padding:8px;border:1px solid #ccd2d8;border-radius:8px}
+.result{font-size:15px}.bars{margin-top:10px}.barrow{display:grid;grid-template-columns:42px 1fr 60px;gap:8px;align-items:center;margin:7px 0}.bar{height:14px;background:#e8edf1;border-radius:99px;overflow:hidden}.fill{height:100%;background:#17202a;border-radius:99px}.note{font-size:11px;color:#667085;line-height:1.5}.tag{display:inline-block;padding:3px 7px;border-radius:7px;background:#eef1f4;font-size:11px;margin:2px}.strong{font-weight:800}
+@media(max-width:500px){.grid{grid-template-columns:1fr}.wrap{padding:10px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="hero"><h1>スマスロ モンキーターンV</h1><div class="sub">設定1・2・4・5・6を総合推測する実戦用ツール</div></div>
+
+<div class="card">
+<h2>① AT初当たり</h2>
+<div class="hint">通常時ゲーム数とAT初当たり回数を入力。最重要の数値判別項目です。</div>
+<div class="grid"><div class="field"><label>通常時G</label><input id="g" type="number" min="0"></div><div class="field"><label>AT初当たり回数</label><input id="at" type="number" min="0"></div></div>
+</div>
+
+<div class="card">
+<h2>② 5枚役【重要】</h2>
+<div class="hint">通常時＋AT中の<strong>総G</strong>と5枚役回数を入力。5枚役は設定1→6で1/38.15→1/22.53と大きな設定差があるため、設定推測の計算に正式に反映します。</div>
+<div class="grid"><div class="field"><label>総G</label><input id="g5" type="number" min="0"></div><div class="field"><label>5枚役回数</label><input id="five" type="number" min="0"></div></div>
+</div>
+
+<div class="card">
+<h2>③ 即優出／即前兆</h2>
+<div class="hint">AT終了後、前兆を経ずに優出モードへ移行した回数。</div>
+<div class="grid"><div class="field"><label>AT終了回数</label><input id="end" type="number" min="0"></div><div class="field"><label>即優出回数</label><input id="soku" type="number" min="0"></div></div>
+</div>
+
+<div class="card">
+<h2>④ ライバルモード</h2>
+<div class="hint">通常時のライバルモード移行回数。榎木・蒲生・浜岡は設定差があるため個別入力。</div>
+<div class="grid">
+<div class="field"><label>ライバルモード判定回数</label><input id="rm" type="number" min="0"></div>
+<div class="field"><label>榎木</label><input id="enoki" type="number" min="0"></div>
+<div class="field"><label>蒲生</label><input id="gamo" type="number" min="0"></div>
+<div class="field"><label>浜岡</label><input id="hama" type="number" min="0"></div>
+</div>
+</div>
+
+<div class="card">
+<h2>⑤ 激走チャージ中 EXアイテム</h2>
+<div class="hint">レア役成立回数とEXアイテム獲得回数を入力。種類別に入力するとより反映されます。</div>
+<div class="grid">
+<div class="field"><label>ボート＋弱チェリー 成立</label><input id="exb" type="number" min="0"></div><div class="field"><label>EX獲得</label><input id="exbh" type="number" min="0"></div>
+<div class="field"><label>弱チャンス目 成立</label><input id="exw" type="number" min="0"></div><div class="field"><label>EX獲得</label><input id="exwh" type="number" min="0"></div>
+<div class="field"><label>強チャンス目 成立</label><input id="exs" type="number" min="0"></div><div class="field"><label>EX獲得</label><input id="exsh" type="number" min="0"></div>
+</div>
+</div>
+
+<div class="card">
+<h2>⑥ AT直撃</h2>
+<div class="hint">優出モードを経由しない弱レア役／強レア役からのAT直撃回数。</div>
+<div class="grid">
+<div class="field"><label>弱レア役から直撃</label><input id="directw" type="number" min="0"></div>
+<div class="field"><label>強レア役から直撃</label><input id="directs" type="number" min="0"></div>
+</div>
+</div>
+
+<div class="card">
+<h2>⑦ 強い設定示唆</h2>
+<div class="hint">確認できたものだけ選択。複数ある場合は最も強い示唆が優先されます。</div>
+<div class="row"><label>舟券</label><select id="ticket"><option value="0">なし</option><option value="2">銀：偶数示唆</option><option value="4">金：設定4以上</option><option value="6">虹：設定6</option></select></div>
+
+<div class="row"><label>激走チャージ後ボイス：波多野「この気配は!?」<small>偶数設定示唆（弱）</small></label><input id="voice_even_weak" type="number" min="0" value="0">
+<div class="row"><label>激走チャージ後ボイス：波多野「落ち着くんだ憲二…」<small>設定5寄り</small></label><input id="voice_default" type="number" min="0" value="0"></div></div>
+<div class="row"><label>激走チャージ後ボイス：榎木「おつかれ」<small>設定2・4・6（偶数設定）濃厚</small></label><input id="voice_even_strong" type="number" min="0" value="0"></div>
+<div class="row"><label>激走チャージ後ボイス：榎木「これが艇王と～」<small>設定4以上濃厚</small></label><input id="voice_high" type="number" min="0" value="0"></div>
+<div class="row"><label>AT終了後：青SGメダル<small>偶数設定示唆</small></label><input id="medal_blue" type="number" min="0" value="0"></div>
+<div class="row"><label>AT終了後：黄SGメダル<small>高設定示唆（弱）</small></label><input id="medal_yellow" type="number" min="0" value="0"></div>
+<div class="row"><label>AT終了後：黒SGメダル<small>高設定示唆（強）</small></label><input id="medal_black" type="number" min="0" value="0"></div>
+<div class="hint">激走チャージ終了時はサブ液晶をタッチしてボイスを確認。波多野白ボイスは2種類の回数を同時に設定別尤度へ反映します。AT終了後はSGメダルの色を記録します。「この気配は!?」は偶数設定側（60%）、「落ち着くんだ憲二…」は設定5（70%）側に偏ります。榎木「おつかれ」は設定2・4・6濃厚、「これが艇王と～」は設定4以上濃厚です。</div>
+<div class="row"><label>AT終了トロフィー</label><select id="trophy"><option value="0">なし</option><option value="2">銅：設定2以上</option><option value="4">金：設定4以上</option><option value="5">ケロット：設定5以上</option><option value="6">虹：設定6</option></select></div>
+<div class="row"><label>獲得枚数表示</label><select id="payout"><option value="0">なし</option><option value="4">456枚OVER：設定4以上</option><option value="5">803枚OVER：設定5以上</option><option value="6">666枚OVER：設定6</option></select></div>
+<div class="row"><label>弱レア役からAT直撃</label><select id="directhint"><option value="0">なし</option><option value="4">あり：設定4以上</option></select></div>
+</div>
+
+<div class="card">
+<h2>⑧ 設定除外</h2>
+<div class="hint">明確な否定要素など、自分で設定を除外したい場合にチェック。</div>
+<div class="grid" id="checks"></div>
+</div>
+
+<div class="card">
+<button class="primary" onclick="calc()">設定を判別する</button>
+<button class="reset" onclick="resetAll()">入力をリセット</button>
+</div>
+
+<div class="card" id="result" style="display:none"></div>
+<div class="card">
+<h2>使い方のポイント</h2>
+<div class="note">AT初当たりだけで決めず、<b>5枚役・即優出・ライバルモード・激走チャージ中EXアイテム</b>を合わせて判断します。特に5枚役は設定1:1/38.15、設定2:1/36.86、設定4:1/30.27、設定5:1/24.51、設定6:1/22.53で、通常時・AT中ともカウント対象です。確定系の示唆は数値判別より優先して設定候補を絞ります。推測値は統計モデルによる目安で、設定を保証するものではありません。</div>
+</div>
+</div>
+
+<script>
+const sets=[1,2,4,5,6];
+const atRate=[299.8,295.5,258.8,235.7,222.9];
+const rmRate=[.078,.082,.109,.141,.156]; // 蒲生系の強い設定差を代表値として利用
+const exB=[.25,.262,.328,.391,.43];
+const exW=[.313,.32,.375,.406,.469];
+const exS=[.50,.52,.57,.62,.664];
+const immediate=[.016,.017,.022,.030,.037];
+// 5枚役出現率（通常時・AT中を合算してカウント）
+const fiveRate=[38.15,36.86,30.27,24.51,22.53];
+const ids=['1','2','4','5','6'];
+document.getElementById('checks').innerHTML=sets.map(s=>`<label><input type="checkbox" id="off${s}"> 設定${s}を除外</label>`).join('');
+
+function val(id){return Math.max(0,Number(document.getElementById(id).value)||0)}
+function poissonLogObs(n,rate,G){
+ if(!G||n<0)return 0;
+ const lam=G/rate;
+ return n*Math.log(lam)-lam; // 共通の log(n!) は比較不要
+}
+function binomLog(k,n,p){
+ if(!n||k<0||k>n)return 0;
+ p=Math.min(.999999,Math.max(.000001,p));
+ return k*Math.log(p)+(n-k)*Math.log(1-p);
+}
+function calc(){
+ let logp=sets.map((s,i)=>-Math.log(sets.length));
+ const G=val('g'), A=val('at');
+ if(G&&A<=G) logp=logp.map((x,i)=>x+poissonLogObs(A,atRate[i],G));
+
+ const G5=val('g5'), F5=val('five');
+ if(G5&&F5<=G5) logp=logp.map((x,i)=>x+poissonLogObs(F5,fiveRate[i],G5));
+
+ const E=val('end'), S=val('soku');
+ if(E&&S<=E) logp=logp.map((x,i)=>x+binomLog(S,E,immediate[i]));
+
+ const RM=val('rm'), EN=val('enoki'), GA=val('gamo'), HA=val('hama');
+ if(RM){
+   const er=[.078,.082,.094,.105,.109], gr=[.078,.086,.109,.141,.156], hr=[.078,.082,.094,.105,.109];
+   if(EN) logp=logp.map((x,i)=>x+binomLog(EN,RM,er[i]));
+   if(GA) logp=logp.map((x,i)=>x+binomLog(GA,RM,gr[i]));
+   if(HA) logp=logp.map((x,i)=>x+binomLog(HA,RM,hr[i]));
+ }
+
+ const eb=val('exb'), ebh=val('exbh'), ew=val('exw'), ewh=val('exwh'), es=val('exs'), esh=val('exsh');
+ if(eb) logp=logp.map((x,i)=>x+binomLog(ebh,eb,exB[i]));
+ if(ew) logp=logp.map((x,i)=>x+binomLog(ewh,ew,exW[i]));
+ if(es) logp=logp.map((x,i)=>x+binomLog(esh,es,exS[i]));
+
+ // 激走チャージ後・波多野白ボイス
+ // 設定1: 落ち着く50% / この気配50%
+ // 設定2: 40% / 60%
+ // 設定4: 40% / 60%
+ // 設定5: 70% / 30%
+ // 設定6: 40% / 60%
+ // 2種類の観測回数を同時に尤度へ入れる。
+ const relax=val('voice_default');
+ const kehai=val('voice_even_weak');
+ if(relax || kehai){
+   const pRelax=[.50,.40,.40,.70,.40];
+   const pKehai=[.50,.60,.60,.30,.60];
+   logp=logp.map((x,i)=>{
+     if(relax) x += relax*Math.log(pRelax[i]);
+     if(kehai) x += kehai*Math.log(pKehai[i]);
+     return x;
+   });
+ }
+
+ // 榎木「おつかれ」：設定2・4・6濃厚
+ const evenStrong=val('voice_even_strong');
+ if(evenStrong) logp=logp.map((x,i)=>x+evenStrong*Math.log([.03,8,.8,.8,8][i]));
+
+ // 榎木「これが艇王と～」：設定4以上濃厚
+ const highVoice=val('voice_high');
+ if(highVoice) logp=logp.map((x,i)=>x+highVoice*Math.log([.03,.03,8,8,8][i]));
+
+ // AT終了後SGメダル
+ const blue=val('medal_blue'), yellow=val('medal_yellow'), black=val('medal_black');
+ if(blue) logp=logp.map((x,i)=>x+blue*Math.log([.85,1.25,1.25,.85,1.25][i]));
+ if(yellow) logp=logp.map((x,i)=>x+yellow*Math.log([.85,.9,1.15,1.35,1.35][i]));
+ if(black) logp=logp.map((x,i)=>x+black*Math.log([.35,.35,1.8,1.8,1.8][i]));
+
+ const max=Math.max(...logp); let probs=logp.map(x=>Math.exp(x-max));
+ const minHint=Math.max(Number(ticket.value),Number(trophy.value),Number(payout.value),Number(directhint.value));
+ probs=probs.map((p,i)=>sets[i]>=minHint?p:0);
+ sets.forEach((s,i)=>{if(document.getElementById('off'+s).checked)probs[i]=0});
+ const sum=probs.reduce((a,b)=>a+b,0)||1; probs=probs.map(p=>p/sum);
+ let exp=sets.reduce((a,s,i)=>a+s*probs[i],0);
+ let best=sets[probs.indexOf(Math.max(...probs))];
+ const entries=sets.map((s,i)=>`<div class="barrow"><b>設定${s}</b><div class="bar"><div class="fill" style="width:${(probs[i]*100).toFixed(1)}%"></div></div><span>${(probs[i]*100).toFixed(1)}%</span></div>`).join('');
+ const result=document.getElementById('result'); result.style.display='block';
+ result.innerHTML=`<h2>判別結果</h2><div class="result"><span class="strong">最も可能性が高い設定：設定${best}</span><br>期待設定値：<span class="strong">${exp.toFixed(2)}</span></div><div class="bars">${entries}</div><p class="note">波多野白ボイスは、設定別の「落ち着く／この気配」の振り分けをそのまま尤度計算しています。入力した項目だけから算出した参考値です。</p>`;
+ localStorage.setItem('monkeyV',JSON.stringify([...document.querySelectorAll('input,select')].map(x=>[x.id,x.type==='checkbox'?x.checked:x.value])));
+}
+function resetAll(){
+ document.querySelectorAll('input').forEach(x=>x.type==='checkbox'?x.checked=false:x.value='');
+ document.querySelectorAll('select').forEach(x=>x.value='0');
+ document.getElementById('result').style.display='none'; localStorage.removeItem('monkeyV');
+}
+window.addEventListener('load',()=>{
+ try{const d=JSON.parse(localStorage.getItem('monkeyV')||'[]');d.forEach(([id,v])=>{const x=document.getElementById(id);if(x)x.type==='checkbox'?x.checked=v:x.value=v})}catch(e){}
+});
+</script>
+</body></html>
